@@ -1,0 +1,7 @@
+{{#each ranges as |range|}}
+    {{hero-range data=range ranges=ranges options=options}}
+{{/each}}
+
+{{#if phantom}}
+    {{hero-phantom options=options}}
+{{/if}}
