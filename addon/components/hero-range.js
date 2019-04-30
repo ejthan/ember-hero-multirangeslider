@@ -15,7 +15,7 @@ export default HeroBase.extend({
 
     style: computed('left', 'right', function() {
         let width = this.right - this.left;
-        let style = 'left:' + this.left + '%; width: ' + width + '%;';
+        let style = 'left:' + this.left + '%; width:' + width + '%;';
         return htmlSafe(style);
     }),
 
@@ -133,7 +133,7 @@ export default HeroBase.extend({
         this.set('left', value[0]);
         this.set('right', value[1]);
 
-        this.data.range = value;
+        this.onChanging(this.data, value);
     },
 
 

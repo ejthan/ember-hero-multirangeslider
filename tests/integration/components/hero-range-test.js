@@ -1,15 +1,19 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('hero-range', 'Integration | Component | hero range', {
-  integration: true
-});
+module('Integration | Component | hero-range', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
-  this.set('model', { id: 1, range: [20, 45]});
+  test('it renders', async function(assert) {
+    assert.expect(2);
 
-  this.render(hbs`{{hero-range data=model}}`);
+    this.set('model', { id: 1, range: [20, 45]});
 
-  assert.equal(this.$().text().trim(), '20 - 45', 'label renders correct');
-  assert.equal(this.$().getAttribute('style'), 'left:20%; width:25%;', 'style renders correct');
+    await render(hbs`{{hero-range data=model}}`);
+
+    assert.equal(this.element.innerText, '20 - 45', 'label renders correct');
+    assert.equal(this.element.querySelector('div').getAttribute('style'), 'left:20%; width:25%;', 'style renders correct');
+  });
 });

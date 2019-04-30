@@ -1,7 +1,18 @@
 {{#each ranges as |range|}}
-    {{hero-range data=range ranges=ranges options=options}}
+    {{hero-range 
+        data=range
+        ranges=ranges
+        options=options
+        onChanging=(action "onChanging")
+    }}
 {{/each}}
 
 {{#if phantom}}
-    {{hero-phantom options=options}}
+    {{hero-phantom
+        options=options
+        ranges=ranges
+        data=phantomData
+        showPhantom=phantom
+        addRange=(action "addRange")
+    }}
 {{/if}}
