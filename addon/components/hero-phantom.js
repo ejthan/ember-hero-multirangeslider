@@ -5,7 +5,7 @@ export default Range.extend({
   layout,
   classNames: ['hero-range', 'hero-phantom'],
 
-  mouseDown(ev) {
+  mouseDown() {
     this.set('_mousePressed', true);
   },
 

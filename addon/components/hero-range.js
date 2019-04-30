@@ -100,7 +100,7 @@ export default HeroBase.extend({
             return;
         }
 
-        if (this.checkForIntersection(newLeft, newRight)) {
+        if (this.checkForIntersection(this.abnormaliseRaw(newLeft), this.abnormaliseRaw(newRight))) {
             return;
         }
 
@@ -113,8 +113,8 @@ export default HeroBase.extend({
         let intersection = false;
         this.ranges.forEach((item) => {
             if (item != this.data) {
-                let left = item.range[0];
-                let right = item.range[1]
+                let left = this.abnormalise(item.range[0]);
+                let right = this.abnormalise(item.range[1]);
                 if (left < newRight && newRight <= right) {
                     intersection = true;
                 }

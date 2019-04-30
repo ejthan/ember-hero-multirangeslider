@@ -63,6 +63,8 @@ export default Controller.extend({
         timeShift.create({ fromTime: '12:00', toTime: '14:00' })
     ]),
 
+    emptyData: A([]),
+
     valueParse: function (date) {
         return moment(date, 'LLLL').valueOf();
     },
@@ -85,6 +87,14 @@ export default Controller.extend({
         },
 
         onChangingTime(model, value) {
+            model.set('range', value);
+        },
+
+        addRangeEmpty(value) {
+            this.emptyData.pushObject(shift.create({ range: value }));
+        },
+
+        onChangingEmpty(model, value) {
             model.set('range', value);
         }
     }

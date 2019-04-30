@@ -5,6 +5,12 @@
 }}
 <br>
 {{hero-rangebar 
+    ranges=emptyData
+    addRange=(action "addRangeEmpty")
+    onChanging=(action "onChangingEmpty")
+}}
+<br>
+{{hero-rangebar 
     ranges=timeData
     addRange=(action "addTimeRange")
     onChanging=(action "onChangingTime")
