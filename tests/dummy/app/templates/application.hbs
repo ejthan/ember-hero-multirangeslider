@@ -3,3 +3,15 @@
     addRange=(action "addRange")
     onChanging=(action "onChanging")
 }}
+<br>
+{{hero-rangebar 
+    ranges=timeData
+    addRange=(action "addTimeRange")
+    onChanging=(action "onChangingTime")
+    valueParse=valueParse
+    min=timeMin
+    max=timeMax
+    step=timeSnap
+    minWidth=timeMinSize
+    label=label
+}}

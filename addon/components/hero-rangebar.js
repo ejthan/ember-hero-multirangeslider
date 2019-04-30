@@ -7,15 +7,25 @@ export default HeroBase.extend({
 
   init() {
     this._super(...arguments);
-    const default_options =  {
-      min: 0,
-      max: 100,
-      readOnly: false,
-      step: 5,
-      minWidth: 5,
-      maxRanges: 3
+    let default_options =  {
+      min: this.min ? this.min : 0,
+      max: this.max ? this.max : 100,
+      readOnly: this.readOnly ? this.readOnly : false,
+      step: this.step ? this.step : 5,
+      minWidth: this.minWidth ? this.minWidth : 5,
+      maxRanges: this.maxRanges ? this.maxRanges : 3,
+      valueParse: this.valueParse ? this.valueParse : (value) => {
+        return value;
+      },
+      label: this.label ? this.label : (value) => {
+        return value[0].toString() + '-' + value[1].toString();
+      },
+      valueFormat: this.valueFormat ? this.valueFormat : (value) => {
+        return value;
+      }
     };
-    this.set('options', Object.assign({}, default_options, this.options));
+    default_options = this._transformOptions(default_options);
+    this.set('options', default_options);
   },
 
   didInsertElement() {
@@ -58,8 +68,17 @@ export default HeroBase.extend({
     this.set('phantom', false);
   },
 
+  _transformOptions(options) {
+    if (options.valueParse) {
+      for (let key of ['min', 'max']) {
+        options[key] = options.valueParse(options[key]);
+      }
+    }
+    return options
+  },
+
   getPhantomValue(cursor) {
-    if (this.getInsideRange(cursor)) {
+    if (this.getInsideRange(this.abnormaliseRaw(cursor))) {
       return null;
     }
 
@@ -85,19 +104,19 @@ export default HeroBase.extend({
       }
     }
 
-    let rangeLeft = this.getInsideRange(left);
+    let rangeLeft = this.getInsideRange(this.abnormaliseRaw(left));
     if (rangeLeft) {
       left = rangeLeft[1];
       right = left + this.options.minWidth;
     }
 
-    let rangeRight = this.getInsideRange(right);
+    let rangeRight = this.getInsideRange(this.abnormaliseRaw(right));
     if (rangeRight) {
       right = rangeRight[0];
       left = right - this.options.minWidth;
     }
 
-    if (this.getInsideRange(left) || this.getInsideRange(right)) {
+    if (this.getInsideRange(this.abnormaliseRaw(left)) || this.getInsideRange(this.abnormaliseRaw(right))) {
       return null
     }
 

@@ -8,6 +8,22 @@ export default Component.extend({
         return value / this.options.bar.rectWidth;
     },
 
+    normaliseRaw(value) {
+        return this.options.min + value * 10 * (this.options.max - this.options.min) /10;
+    },
+
+    normalise(value) {
+        return this.options.valueFormat(this.normaliseRaw(value));
+    },
+
+    abnormaliseRaw(value) {
+        return (value - this.options.min) / (this.options.max - this.options.min);
+    },
+
+    abnormalise(value) {
+        return this.abnormaliseRaw(this.options.valueParse(value));
+    },
+
     unitToUser(value) {
         return (this.options.max - this.options.min) * value + this.options.min;
     },
@@ -24,7 +40,7 @@ export default Component.extend({
     getInsideRange(cursor) {
         let range = false;
         this.ranges.forEach((item) => {
-            if (item.range[0] < cursor && cursor < item.range[1]) {
+            if (this.abnormalise(item.range[0]) < cursor && cursor < this.abnormalise(item.range[1])) {
                 range = item.range;
             }
         })
@@ -33,7 +49,7 @@ export default Component.extend({
 
     isOverRange(left, right) {
         return this.ranges.some((item) => {
-            if (left <= item.range[0] && item.range[1] <= right) {
+            if (left <= this.abnormalise(item.range[0]) && this.abnormalise(item.range[1]) <= right) {
                 return true;
             }
         });

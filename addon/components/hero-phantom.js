@@ -1,7 +1,5 @@
 import Range from './hero-range';
 import layout from '../templates/components/hero-phantom';
-import { computed } from '@ember/object';
-import { htmlSafe } from '@ember/string';
 
 export default Range.extend({
   layout,
@@ -13,7 +11,7 @@ export default Range.extend({
 
   _mouseUp() {
     if (this.showPhantom && this._mousePressed) {
-      this.addRange([this.left, this.right]);
+      this.addRange([this.normaliseRaw(this.left), this.normaliseRaw(this.right)]);
     }
     this.set('_mousePressed', false);
     this.set('showPhantom', false);
@@ -22,7 +20,7 @@ export default Range.extend({
   _mouseMove(ev) {
     let cursor = this.getCursorPosition(ev);
 
-    if (this.getInsideRange(cursor)) {
+    if (this.getInsideRange(this.abnormaliseRaw(cursor))) {
       if (!this._mousePressed) {
         this.set('showPhantom', false);
       }
@@ -36,7 +34,7 @@ export default Range.extend({
     let dLeft = Math.floor(h / 2) * this.options.step;
     let dRight = Math.floor((h + 1) / 2) * this.options.step;
 
-    let [newLeft, newRight] = [this.left, this.right];
+    let [newLeft, newRight] = [this.normaliseRaw(this.left), this.normaliseRaw(this.right)];
 
     if (this._mousePressed) {
       if (cursor < center) {
@@ -62,7 +60,7 @@ export default Range.extend({
       }
     }
 
-    if (this.getInsideRange(newLeft) || this.getInsideRange(newRight)) {
+    if (this.getInsideRange(this.abnormaliseRaw(newLeft)) || this.getInsideRange(this.abnormaliseRaw(newRight))) {
       return
     }
 
@@ -74,8 +72,8 @@ export default Range.extend({
   },
 
   setValue(value) {
-    this.set('left', value[0]);
-    this.set('right', value[1]);
+    this.set('left', this.abnormaliseRaw(value[0]));
+    this.set('right', this.abnormaliseRaw(value[1]));
   }
 
 });

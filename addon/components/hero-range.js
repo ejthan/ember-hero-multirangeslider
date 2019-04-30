@@ -10,30 +10,30 @@ export default HeroBase.extend({
     _mousePressed: false,
 
     labelValue: computed('left', 'right', function() {
-        return this.left + ' - ' + this.right;
+        return this.options.label([this.normalise(this.left), this.normalise(this.right)]);
     }),
 
     style: computed('left', 'right', function() {
         let width = this.right - this.left;
-        let style = 'left:' + this.left + '%; width:' + width + '%;';
+        let style = 'left:' + 100 * this.left + '%; width:' + 100 * width + '%;';
         return htmlSafe(style);
     }),
 
     init() {
         this._super(...arguments);
-        this.set('left', this.data.range[0]);
-        this.set('right', this.data.range[1]);
+        this.set('left', this.abnormalise(this.data.range[0]));
+        this.set('right', this.abnormalise(this.data.range[1]));
     },
 
     didInsertElement() {
         this._mouseMoveProxy = (event) => this._mouseMove(event);
         this._mouseUpProxy = (event) => this._mouseUp(event);
-        this.$().parent().on('mousemove', this._mouseMoveProxy);
+        this.$(document).on('mousemove', this._mouseMoveProxy);
         this.$(document).on('mouseup', this._mouseUpProxy);
     },
 
     willDestroyElement() {
-        this.$().parent().off('mousemove', this._mouseMoveProxy);
+        this.$(document).off('mousemove', this._mouseMoveProxy);
         this.$(document).off('mouseup', this._mouseUpProxy);
     },
 
@@ -71,8 +71,8 @@ export default HeroBase.extend({
             return
         }
 
-        let newRight = this.right;
-        let newLeft = this.left;
+        let newRight = this.normaliseRaw(this.right);
+        let newLeft = this.normaliseRaw(this.left);
 
         if (this._pressedMode == 'this') {
             newRight += diff;
@@ -130,8 +130,8 @@ export default HeroBase.extend({
     },
 
     setValue(value) {
-        this.set('left', value[0]);
-        this.set('right', value[1]);
+        this.set('left', this.abnormaliseRaw(value[0]));
+        this.set('right', this.abnormaliseRaw(value[1]));
 
         this.onChanging(this.data, value);
     },
