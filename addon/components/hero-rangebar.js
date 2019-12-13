@@ -7,7 +7,7 @@ export default HeroBase.extend({
 
   init() {
     this._super(...arguments);
-    let default_options =  {
+    let default_options = {
       min: this.min ? this.min : 0,
       max: this.max ? this.max : 100,
       readOnly: this.readOnly ? this.readOnly : false,
@@ -64,7 +64,21 @@ export default HeroBase.extend({
     this.set('phantom', true);
   },
 
+  mouseDown(ev) {
+    if (this.options.readOnly) {
+      return;
+    }
+    this.set('_mousePressed', true);
+  },
+
+  mouseUp() {
+    this.set('_mousePressed', false);
+  },
+
   mouseLeave() {
+    if (this._mousePressed) {
+      return;
+    }
     this.set('phantom', false);
   },
 
