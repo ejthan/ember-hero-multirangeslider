@@ -37,10 +37,10 @@ export default Range.extend({
     let [newLeft, newRight] = [this.normaliseRaw(this.left), this.normaliseRaw(this.right)];
 
     if (this._mousePressed) {
-      if (cursor < center) {
+      if (this.abnormaliseRaw(cursor) < center) {
         newLeft = cursor - dLeft;
       }
-      if (cursor > center) {
+      if (this.abnormaliseRaw(cursor) > center) {
         newRight = cursor + dRight;
       }
     } else {
