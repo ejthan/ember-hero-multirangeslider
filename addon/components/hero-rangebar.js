@@ -64,7 +64,7 @@ export default HeroBase.extend({
     this.set('phantom', true);
   },
 
-  mouseDown(ev) {
+  mouseDown() {
     if (this.options.readOnly) {
       return;
     }
