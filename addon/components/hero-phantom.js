@@ -11,10 +11,10 @@ export default Range.extend({
 
   _mouseUp() {
     if (this.showPhantom && this._mousePressed) {
+      this.set('_mousePressed', false);
+      this.set('showPhantom', false);
       this.addRange([this.normaliseRaw(this.left), this.normaliseRaw(this.right)]);
     }
-    this.set('_mousePressed', false);
-    this.set('showPhantom', false);
   },
 
   _mouseMove(ev) {
